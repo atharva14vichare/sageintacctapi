@@ -1,10 +1,10 @@
+using Microsoft.Extensions.Options;
 using SageIntacctApi.Services;
 using SageIntacctApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -13,7 +13,7 @@ builder.Services.Configure<SageIntacctConfig>(builder.Configuration.GetSection("
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<ISageIntacctService, SageIntacctService>();
 
-builder.Logging.AddConsole();
+builder.Logging.AddConsole(); 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,6 +24,5 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthorization();
-app.MapControllers();
+app.MapGet("/", () => "API is running!");
 app.Run();

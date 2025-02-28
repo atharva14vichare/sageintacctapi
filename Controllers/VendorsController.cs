@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SageIntacctApi.Services;
+using System.Threading.Tasks;
 
 namespace SageIntacctApi.Controllers;
 
@@ -8,27 +9,24 @@ namespace SageIntacctApi.Controllers;
 public class VendorsController : ControllerBase
 {
     private readonly ISageIntacctService _sageIntacctService;
-    private readonly ILogger<VendorsController> _logger;
 
-    public VendorsController(ISageIntacctService sageIntacctService, ILogger<VendorsController> logger)
+    public VendorsController(ISageIntacctService sageIntacctService)
     {
         _sageIntacctService = sageIntacctService;
-        _logger = logger;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetVendors()
+    public async Task<IActionResult> GetVendors(string authorizationCode)
     {
         try
         {
-            // Direct XML call without OAuth
-            var vendorsData = await _sageIntacctService.GetVendorsAsync("direct-xml-auth");
-            return Ok(vendorsData);
+            var accessToken = await _sageIntacctService.GetAccessTokenAsync(authorizationCode);
+            var vendorsJson = await _sageIntacctService.GetVendorsAsync(accessToken);
+            return Ok(vendorsJson);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error retrieving vendors");
-            return BadRequest(new { error = ex.Message });
+            return BadRequest(ex.Message);
         }
     }
 }
