@@ -1,0 +1,6 @@
+@SageIntacctApi_HostAddress = http://localhost:5117
+
+GET {{SageIntacctApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
