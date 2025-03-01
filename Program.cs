@@ -2,11 +2,14 @@ using Microsoft.Extensions.Options;
 using SageIntacctApi.Services;
 using SageIntacctApi.Models;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddControllers();
 
 // Add the Sage Intacct configuration
 builder.Services.Configure<SageIntacctConfig>(builder.Configuration.GetSection("SageIntacct"));
