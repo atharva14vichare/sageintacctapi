@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Options;
 using SageIntacctApi.Services;
 using SageIntacctApi.Models;
-
+using Microsoft.Extensions.Logging; // Added for logging
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,16 +16,31 @@ builder.Services.Configure<SageIntacctConfig>(builder.Configuration.GetSection("
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<ISageIntacctService, SageIntacctService>();
 
-builder.Logging.AddConsole(); 
+builder.Logging.AddConsole();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    // Simplified middleware pipeline
+    app.UseRouting();
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers(); // Map your controllers
+    });
+
+    // Logging middleware (example)
+    app.Use(async (context, next) =>
+    {
+        var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+        logger.LogInformation($"Request: {context.Request.Method} {context.Request.Path}");
+        await next();
+        logger.LogInformation($"Response: {context.Response.StatusCode}");
+    });
+
 }
 
 app.UseHttpsRedirection();
 app.MapGet("/", () => "API is running!");
+
 app.Run();
