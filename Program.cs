@@ -1,28 +1,19 @@
-using Microsoft.Extensions.Options;
 using SageIntacctApi.Services;
 using SageIntacctApi.Models;
-using Microsoft.Extensions.Logging; // Added for logging
+using Microsoft.Extensions.Logging;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddControllers();
 
-// Add the Sage Intacct configuration
+//  Sage Intacct configuration
 builder.Services.Configure<SageIntacctConfig>(builder.Configuration.GetSection("SageIntacct"));
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<ISageIntacctService, SageIntacctService>();
-
-
-// //Add the auth code to the config file.
-// builder.Services.Configure<SageIntacctConfig>(config =>
-// {
-//     config.AuthCode = "YOUR_AUTH_CODE_HERE"; // Replace with your actual auth code
-// });
-
 
 
 builder.Logging.AddConsole();
@@ -31,14 +22,10 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    // Simplified middleware pipeline
+    
     app.UseRouting();
-    app.UseEndpoints(endpoints =>
-    {
-        endpoints.MapControllers(); // Map your controllers
-    });
+    app.MapControllers();
 
-    // Logging middleware (example)
     app.Use(async (context, next) =>
     {
         var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();

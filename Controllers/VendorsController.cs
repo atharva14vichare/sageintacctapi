@@ -23,11 +23,6 @@ public class VendorsController : ControllerBase
     {
         _logger.LogInformation("GetVendors endpoint reached!");
 
-        // if (string.IsNullOrEmpty(authCode))
-        // {
-        //     return BadRequest("Authorization code is required.");
-        // }
-
         try
         {
             var accessToken = await _sageIntacctService.GetAccessTokenAsync();

@@ -1,0 +1,27 @@
+{
+	"info": {
+		"_postman_id": "55465f1e-394c-49f2-bff3-4b26266c7a4a",
+		"name": "SageIntacctTest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15838186",
+		"_collection_link": "https://cloudy-satellite-163625.postman.co/workspace/Atharva's-workplace~eb86b2f5-b1dd-4b51-9648-0af1a1d6f066/collection/15838186-55465f1e-394c-49f2-bff3-4b26266c7a4a?action=share&source=collection_link&creator=15838186"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
