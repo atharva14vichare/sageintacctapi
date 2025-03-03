@@ -16,6 +16,15 @@ builder.Services.Configure<SageIntacctConfig>(builder.Configuration.GetSection("
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<ISageIntacctService, SageIntacctService>();
 
+
+// //Add the auth code to the config file.
+// builder.Services.Configure<SageIntacctConfig>(config =>
+// {
+//     config.AuthCode = "YOUR_AUTH_CODE_HERE"; // Replace with your actual auth code
+// });
+
+
+
 builder.Logging.AddConsole();
 var app = builder.Build();
 

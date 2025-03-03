@@ -1,25 +1,6 @@
-
-
-    // [HttpGet]
-    // public  ActionResult<IEnumerable<string>> GetVendors()
-    // {   
-    //     return new string[] { "Test 1", " Test 2" };
-    //     // try
-    //     // {
-    //     //     var accessToken = await _sageIntacctService.GetAccessTokenAsync();
-            
-    //     //     var vendorsJson = await _sageIntacctService.GetVendorsAsync(accessToken);
-    //     //     return Ok(vendorsJson);
-    //     // }
-    //     // catch (Exception ex)
-    //     // {
-    //     //     return BadRequest(ex.Message);
-    //     // }
-    // }
-
 using Microsoft.AspNetCore.Mvc;
 using SageIntacctApi.Services;
-using Microsoft.Extensions.Logging; // Add this
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace SageIntacctApi.Controllers;
@@ -29,18 +10,38 @@ namespace SageIntacctApi.Controllers;
 public class VendorsController : ControllerBase
 {
     private readonly ISageIntacctService _sageIntacctService;
-    private readonly ILogger<VendorsController> _logger; // Add this
+    private readonly ILogger<VendorsController> _logger;
 
-    public VendorsController(ISageIntacctService sageIntacctService, ILogger<VendorsController> logger) // Modify constructor
+    public VendorsController(ISageIntacctService sageIntacctService, ILogger<VendorsController> logger)
     {
         _sageIntacctService = sageIntacctService;
-        _logger = logger; // Add this
+        _logger = logger;
     }
 
     [HttpGet]
-    public ActionResult<string> GetVendors()
+    public async Task<ActionResult<string>> GetVendors()
     {
-        _logger.LogInformation("GetVendors endpoint reached!"); // Add this
-        return "Vendors endpoint reached!";
+        _logger.LogInformation("GetVendors endpoint reached!");
+
+        // if (string.IsNullOrEmpty(authCode))
+        // {
+        //     return BadRequest("Authorization code is required.");
+        // }
+
+        try
+        {
+            var accessToken = await _sageIntacctService.GetAccessTokenAsync();
+            _logger.LogInformation($"Access Token: {accessToken}");
+
+            var vendorsJson = await _sageIntacctService.GetVendorsAsync(accessToken);
+            _logger.LogInformation($"Vendors JSON: {vendorsJson}");
+
+            return Ok(vendorsJson);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving vendors.");
+            return BadRequest(ex.Message);
+        }
     }
 }
